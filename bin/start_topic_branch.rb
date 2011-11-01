@@ -19,10 +19,11 @@ topic_branch = "t_" + current_branch + "_" + username
 topic_branch = topic_branch + "_" + suffix if suffix
 
 topic_branch = topic_branch + "_" + date_tag
-puts topic_branch
+puts "Starting topic branch: #{topic_branch}"
 
 g.checkout(current_branch)
-g.branch(topic_branch)
+g.branch(topic_branch).delete if g.branches[topic_branch]
+g.branch(topic_branch).checkout
 
 # Update the version number and commit
 version_plist = `find_project_info_plist.rb`.split("\n")[0]
@@ -30,4 +31,5 @@ if version_plist
   `inc_version.rb #{version_plist}`
 end
 
-g.commit("Started topic branch '#{topic_branch}'")
+# Commit the result
+g.commit_all("Started topic branch '#{topic_branch}'")
