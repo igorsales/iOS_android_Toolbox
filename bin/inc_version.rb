@@ -45,6 +45,8 @@ exit 1 if version.nil?
 
 components = version.split('.')
 
+should_inc_prev_idx = inc_idx > 0 and components[inc_idx].nil?
+
 while components.length <= inc_idx
   components.push 0
 end
@@ -59,6 +61,10 @@ inc_comp += 1
 components[inc_idx] = inc_comp
 components.each_index do |i|
   components[i] = 0 if i > inc_idx
+end
+
+if should_inc_prev_idx
+  components[inc_idx-1] = components[inc_idx-1]+1
 end
 
 components = components.slice(0,max_comps)
