@@ -45,7 +45,7 @@ exit 1 if version.nil?
 
 components = version.split('.')
 
-should_inc_prev_idx = inc_idx > 0 and components[inc_idx].nil?
+should_inc_prev_idx = (inc_idx > 0 and components[inc_idx].nil?)
 
 while components.length < inc_idx
   components.push 0

@@ -10,8 +10,14 @@ candidates = []
 plists=`find . -name "*.plist"`
 
 plists.split("\n").each do |filename|
-  dict = Plist.parse_xml(filename)
-  candidates.push filename if !dict[VersionKey].nil?
+  if File.exists?(filename)
+    begin
+      dict = Plist.parse_xml(filename)
+      candidates.push filename if dict and dict[VersionKey]
+    rescue
+      # Do nothing, just skip the file. Must be in binary format
+    end
+  end
 end
 
 max_components = 9999
