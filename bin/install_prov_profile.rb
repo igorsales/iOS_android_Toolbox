@@ -66,7 +66,7 @@ Dir.foreach(PROV_PROFILE_DIR) do |item|
 
   if old_app_id == new_app_id and old_cdate < new_cdate
     puts "Removing stale Prov Profile: #{item}"
-    unlink item
+    File.unlink PROV_PROFILE_DIR+'/'+item
   end
 end
 
