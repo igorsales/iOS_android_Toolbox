@@ -1,5 +1,7 @@
 require "ios_android_toolbox/version"
 
 module IosAndroidToolbox
-  # Your code goes here...
+  def is_android_project?
+    File.file?('AndroidManifest.xml')
+  end
 end
