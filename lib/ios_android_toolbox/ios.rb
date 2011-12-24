@@ -10,8 +10,6 @@ module IosAndroidToolbox
   class IosVersionController < VersionController
     VERSION_KEY = 'CFBundleVersion'
 
-    attr_accessor :inc_idx, :max_comps
-
     def initialize(version_file)
       raise "No version file specified" if version_file.nil?
 
