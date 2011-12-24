@@ -9,6 +9,7 @@ module IosAndroidToolbox
     
     class AndroidVersionController < VersionController
         MANIFEST='/manifest'
+        ANDROID_NS='android:'
         ANDROID_VERSION_CODE='versionCode'
         ANDROID_VERSION_NAME='versionName'
 
@@ -55,17 +56,21 @@ module IosAndroidToolbox
         end
         
         def next_version!(inc_idx = nil)
-            @manifest[ANDROID_VERSION_NAME] = next_version
+            @manifest[ANDROID_NS+ANDROID_VERSION_NAME] = next_version
         end
         
         def write_to_xml_file(output_file)
             if output_file == '-'
                 puts @xml.to_xml
             else
-                f = File.new(output_file)
-                f.write(@xml.to_xml)
-                f.close
+                File.open output_file, "w+" do |f|
+                    f.write(@xml.to_xml)
+                end
             end
+        end
+
+        def write_to_output_file(output_file)
+            write_to_xml_file(output_file)
         end
     end
 end

@@ -2,7 +2,9 @@
 
 require 'rubygems'
 require 'optparse'
+require 'ios_android_toolbox'
 require 'ios_android_toolbox/ios'
+require 'ios_android_toolbox/android'
 
 include IosAndroidToolbox
 
@@ -34,16 +36,17 @@ OptionParser.new do |opts|
   end
 end.parse!
 
-version_file = ARGV.shift
+version_file = VersionController.version_file
 raise "Please specify the info.plist file" if version_file.nil?
 
-ctrl = IosVersionController.new(version_file)
+ctrl = version_controller_for_version_file version_file
 
 ctrl.inc_idx   = $inc_idx
 ctrl.max_comps = $max_comps
 ctrl.next_version!
 
 $output_file = version_file if $output_file == nil
-ctrl.write_to_plist_file($output_file)
+
+ctrl.write_to_output_file($output_file)
 
 

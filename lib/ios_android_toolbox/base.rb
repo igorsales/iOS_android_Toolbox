@@ -31,6 +31,17 @@ module IosAndroidToolbox
       candidates.find_all { |filename| filename.split(File::SEPARATOR).length == max_components }
     end
 
+    def self.version_file
+      version_file = ARGV.shift
+      if version_file.nil?
+        files = IosVersionController.find_project_info << AndroidVersionController.find_project_info
+        files.flatten!
+        
+        version_file = files.first if files.length == 1
+      end
+      version_file
+    end
+
     def version
       raise "Abstract method. Please override"
     end
@@ -76,5 +87,10 @@ module IosAndroidToolbox
     def next_version!(inc_idx = nil)
       raise "Abstract method. Please override"
     end
+
+    def write_to_output_file(output_file)
+        raise "Abstract method. Please override"
+    end
+
   end
 end

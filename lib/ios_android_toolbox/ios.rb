@@ -58,5 +58,9 @@ module IosAndroidToolbox
         @dict.save_plist output_file
       end
     end
+
+    def write_to_output_file(output_file)
+        write_to_plist_file(output_file)
+    end
   end
 end
