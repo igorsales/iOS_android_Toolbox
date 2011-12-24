@@ -10,6 +10,26 @@ module IosAndroidToolbox
 
     @inc_idx   = 3
     @max_comps = 4
+      
+    def self.find_project_info_candidates_for_dir
+      raise "Abstract class method. Please override"
+    end
+      
+    def self.find_project_info(dir = nil)
+      dir ||= '.'
+      
+      candidates = find_project_info_candidates_for_dir(dir)      
+
+      max_components = 9999
+      candidates.each do |filename|
+        components = filename.split(File::SEPARATOR)
+        if components.length < max_components
+          max_components = components.length
+        end
+      end
+
+      candidates.find_all { |filename| filename.split(File::SEPARATOR).length == max_components }
+    end
 
     def version
       raise "Abstract method. Please override"

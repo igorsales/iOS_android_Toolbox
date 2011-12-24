@@ -1,7 +1,6 @@
 #!/usr/bin/ruby
 
 require 'rubygems'
-require 'plist'
 require 'optparse'
 require 'ios_android_toolbox/ios'
 

@@ -9,6 +9,25 @@ module IosAndroidToolbox
 
   class IosVersionController < VersionController
     VERSION_KEY = 'CFBundleVersion'
+      
+    def self.find_project_info_candidates_for_dir(dir)
+      candidates = []
+      
+      plists=`find "#{dir}" -name "*.plist"`
+      
+      plists.split("\n").each do |filename|
+        if File.exists?(filename)
+          begin
+            dict = Plist.parse_xml(filename)
+            candidates.push filename if dict and dict[VERSION_KEY]
+          rescue
+            # Do nothing, just skip the file. Must be in binary format
+          end
+        end
+      end
+
+      candidates
+    end
 
     def initialize(version_file)
       raise "No version file specified" if version_file.nil?

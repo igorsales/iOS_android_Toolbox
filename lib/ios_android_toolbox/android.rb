@@ -12,13 +12,30 @@ module IosAndroidToolbox
         ANDROID_VERSION_CODE='versionCode'
         ANDROID_VERSION_NAME='versionName'
 
+        def self.find_project_info_candidates_for_dir(dir)
+          candidates = []
+
+          manifests=`find "#{dir}" -name "AndroidManifest.xml"`
+        
+          manifests.split("\n").each do |filename|
+            if File.exists?(filename)
+              begin
+                manifest = Nokogiri::XML(File.open(filename)).xpath(MANIFEST, 'android' => "http://schemas.android.com/apk/res/android").first
+                candidates.push filename if manifest and manifest[ANDROID_VERSION_NAME]
+              rescue
+                # Do nothing, just skip the file. Must be in binary format
+              end
+            end
+          end
+
+          candidates
+        end
+
         def initialize(manifest_file)
             raise "No manifest file specified" if manifest_file.nil?
             
             begin
-                f = File.open(manifest_file)
-                @xml = Nokogiri::XML(f)
-                f.close
+                @xml = Nokogiri::XML(File.open(manifest_file))
                 @manifest = @xml.xpath(MANIFEST, 'android' => "http://schemas.android.com/apk/res/android").first
             rescue
                 raise "Cannot parse file #{version_file}"
