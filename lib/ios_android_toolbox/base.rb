@@ -8,8 +8,10 @@ module IosAndroidToolbox
   class VersionController
     attr_accessor :inc_idx, :max_comps
 
-    @inc_idx   = 3
-    @max_comps = 4
+    def initialize
+      @inc_idx   = 3
+      @max_comps = 4
+    end
       
     def self.find_project_info_candidates_for_dir
       raise "Abstract class method. Please override"

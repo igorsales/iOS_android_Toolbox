@@ -2,11 +2,24 @@
 
 require 'rubygems'
 require 'git'
+require 'ios_android_toolbox'
+
+include IosAndroidToolbox
 
 username = ENV['USER']
 date_tag = Time.now.strftime("%Y%m%d_%Hh%Mm")
-suffix   = ARGV.shift
-suffix = suffix.gsub(/[ \t\n]/, '_') if suffix
+topic    = ARGV.shift
+
+version_file = VersionController.version_file
+raise "Please specify the version file" if version_file.nil?
+
+ctrl = version_controller_for_version_file version_file
+
+if topic.nil?
+  topic = ctrl.version
+end
+
+topic.gsub!(/[\. \t\n]/, '_') if topic
 
 g = Git.open('.')
 raise "Cannot open repo" if g.nil?
@@ -16,7 +29,7 @@ current_branch = 'master' if current_branch.nil?
 
 topic_branch = "t_" + current_branch + "_" + username
 
-topic_branch = topic_branch + "_" + suffix if suffix
+topic_branch = topic_branch + "_" + topic if topic
 
 topic_branch = topic_branch + "_" + date_tag
 puts "Starting topic branch: #{topic_branch}"
@@ -26,10 +39,8 @@ g.branch(topic_branch).delete if g.branches[topic_branch]
 g.branch(topic_branch).checkout
 
 # Update the version number and commit
-version_plist = `find_project_info_plist.rb`.split("\n")[0]
-if version_plist
-  `inc_version.rb #{version_plist}`
-end
+ctrl.next_version!
+ctrl.write_to_output_file version_file
 
 # Commit the result
 g.commit_all("Started topic branch '#{topic_branch}'")

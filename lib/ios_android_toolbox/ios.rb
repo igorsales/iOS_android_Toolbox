@@ -30,6 +30,7 @@ module IosAndroidToolbox
     end
 
     def initialize(version_file)
+      super()
       raise "No version file specified" if version_file.nil?
 
       begin

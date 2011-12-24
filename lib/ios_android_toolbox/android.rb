@@ -33,6 +33,7 @@ module IosAndroidToolbox
         end
 
         def initialize(manifest_file)
+            super()
             raise "No manifest file specified" if manifest_file.nil?
             
             begin
