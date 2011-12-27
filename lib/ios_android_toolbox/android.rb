@@ -12,6 +12,8 @@ module IosAndroidToolbox
         ANDROID_NS='android:'
         ANDROID_VERSION_CODE='versionCode'
         ANDROID_VERSION_NAME='versionName'
+        APP='application'
+        ANDROID_DEBUGGABLE='debuggable'
 
         def self.find_project_info_candidates_for_dir(dir)
           candidates = []
@@ -58,6 +60,26 @@ module IosAndroidToolbox
         
         def next_version!(inc_idx = nil)
             @manifest[ANDROID_NS+ANDROID_VERSION_NAME] = next_version
+        end
+
+        def next_version_code
+            version_code.to_i + 1
+        end
+        
+        def next_version_code!
+            @manifest[ANDROID_NS+ANDROID_VERSION_CODE] = next_version_code
+        end
+
+        def application
+            @manifest.xpath(APP, 'android' => "http://schemas.android.com/apk/res/android").first
+        end
+
+        def set_debuggable(on = true)
+            application[ANDROID_NS+ANDROID_DEBUGGABLE] = (on ? 'true' : 'false')
+        end
+
+        def release_version
+            @manifest[ANDROID_NS+ANDROID_VERSION_NAME] = components.slice(0,3).join "."
         end
         
         def write_to_xml_file(output_file)
