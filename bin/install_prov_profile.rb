@@ -2,6 +2,7 @@
 
 require 'rubygems'
 require 'parsedate'
+require 'time'
 
 DEBUG=false
 PROV_PROFILE_DIR=ENV['HOME']+'/Library/MobileDevice/Provisioning Profiles'
