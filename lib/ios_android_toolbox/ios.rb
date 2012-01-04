@@ -9,6 +9,7 @@ module IosAndroidToolbox
 
   class IosVersionController < VersionController
     VERSION_KEY = 'CFBundleVersion'
+    SHORT_VERSION_KEY = 'CFBundleShortVersionString'
       
     def self.find_project_info_candidates_for_dir(dir)
       candidates = []
@@ -49,7 +50,7 @@ module IosAndroidToolbox
     end
 
     def next_version!(inc_idx = nil)
-      @dict[VERSION_KEY] = next_version
+      @dict[SHORT_VERSION_KEY] = @dict[VERSION_KEY] = next_version
     end
 
     def write_to_plist_file(output_file)
