@@ -16,7 +16,7 @@ raise "Please specify the version file" if version_file.nil?
 ctrl = version_controller_for_version_file version_file
 
 if topic.nil?
-  topic = ctrl.version
+  topic = ctrl.next_version.gsub(/\.0$/,'')
 end
 
 topic.gsub!(/[\. \t\n]/, '_') if topic
