@@ -48,9 +48,15 @@ def creation_date_from_profile(contents)
   end
 end
 
+def has_provisioned_devices(contents)
+  # <key>ProvisionedDevices</key>
+  /<key>ProvisionedDevices<\/key>/.match(contents)
+end
+
 new_uuid   = uuid_for_profile(prov_profile)
 new_app_id = app_id_from_profile(prov_profile)
 new_cdate  = creation_date_from_profile(prov_profile)
+new_is_dev = has_provisioned_devices(prov_profile)
 
 # Look through each file in the list
 Dir.foreach(PROV_PROFILE_DIR) do |item|
@@ -64,8 +70,9 @@ Dir.foreach(PROV_PROFILE_DIR) do |item|
   old_uuid   = uuid_for_profile(old_prov_profile)
   old_app_id = app_id_from_profile(old_prov_profile)
   old_cdate  = creation_date_from_profile(old_prov_profile)
+  old_is_dev = has_provisioned_devices(old_prov_profile)
 
-  if old_app_id == new_app_id and old_cdate < new_cdate
+  if old_app_id == new_app_id and old_cdate < new_cdate and old_is_dev == new_is_dev
     puts "Removing stale Prov Profile: #{item}"
     File.unlink PROV_PROFILE_DIR+'/'+item
   end
