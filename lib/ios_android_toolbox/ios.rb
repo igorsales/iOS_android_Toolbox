@@ -10,6 +10,8 @@ module IosAndroidToolbox
   class IosVersionController < VersionController
     VERSION_KEY = 'CFBundleVersion'
     SHORT_VERSION_KEY = 'CFBundleShortVersionString'
+    URL_TYPES_KEY = "CFBundleURLTypes"
+    URL_SCHEMES_KEY = "CFBundleURLSchemes"
       
     def self.find_project_info_candidates_for_dir(dir)
       candidates = []
@@ -51,6 +53,26 @@ module IosAndroidToolbox
 
     def next_version!(inc_idx = nil)
       @dict[SHORT_VERSION_KEY] = @dict[VERSION_KEY] = next_version
+    end
+
+    def url_types
+      @dict[URL_TYPES_KEY]
+    end
+
+    def url_schemes
+      schemes = url_types.collect do |ary|
+        ary[URL_SCHEMES_KEY]
+      end
+      schemes.flatten
+    end
+
+    def replace_url_scheme(prev, replace)
+      url_types.each do |url_type_dict|
+        schemes = url_type_dict[URL_SCHEMES_KEY]
+        schemes.each_index do |i|
+          schemes[i] = replace if prev == schemes[i]
+        end
+      end
     end
 
     def write_to_plist_file(output_file)
