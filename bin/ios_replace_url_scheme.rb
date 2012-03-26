@@ -42,4 +42,4 @@ else
 end
 
 ctrl.replace_url_scheme(prev, replace)
-ctrl.write_to_plist_file('-')
+ctrl.write_to_plist_file(version_file)
