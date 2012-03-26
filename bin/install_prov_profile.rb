@@ -58,6 +58,8 @@ new_app_id = app_id_from_profile(prov_profile)
 new_cdate  = creation_date_from_profile(prov_profile)
 new_is_dev = has_provisioned_devices(prov_profile)
 
+Dir.mkdir(PROV_PROFILE_DIR, 755) if File.directory?(PROV_PROFILE_DIR)
+
 # Look through each file in the list
 Dir.foreach(PROV_PROFILE_DIR) do |item|
   next if item == '.' or item == '..'
