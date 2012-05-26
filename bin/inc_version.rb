@@ -48,5 +48,6 @@ ctrl.next_version!
 $output_file = version_file if $output_file == nil
 
 ctrl.write_to_output_file($output_file)
+puts ctrl.version
 
 
