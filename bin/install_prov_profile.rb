@@ -1,8 +1,6 @@
 #!/usr/bin/ruby
 
 require 'rubygems'
-require 'parsedate'
-require 'time'
 require 'ios_android_toolbox/ios_prov_profile'
 
 include IosAndroidToolbox
