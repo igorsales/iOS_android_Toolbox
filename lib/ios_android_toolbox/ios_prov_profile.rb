@@ -104,7 +104,8 @@ module IosAndroidToolbox
 		def self.profile_worth_installing?(path)
 			new_profile = IosProvisioningProfile.new(path)
 			loop_through_existing_profiles do |installed_profile|
-  				if installed_profile.app_id == new_profile.app_id
+  				if installed_profile.app_id == new_profile.app_id and installed_profile.has_provisioned_devices? == new_profile.has_provisioned_devices?
+  					puts "#{installed_profile.creation_date} #{new_profile.creation_date}"
 	 			  	return false if installed_profile.creation_date >= new_profile.creation_date 
   				end
 			end
