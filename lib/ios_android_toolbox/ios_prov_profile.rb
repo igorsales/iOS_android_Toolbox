@@ -47,7 +47,7 @@ module IosAndroidToolbox
 
 		def has_provisioned_devices?
 		  # <key>ProvisionedDevices</key>
-		  /<key>ProvisionedDevices<\/key>/.match(contents)
+		  !!(/<key>ProvisionedDevices<\/key>/.match(contents))
 		end
 
 		def initialize(contents)
@@ -64,15 +64,7 @@ module IosAndroidToolbox
 		def self.remove_stale_equivalent_profiles(path)
 			new_profile = IosProvisioningProfile.new(path)
 
-			# Look through each file in the list
-			# Dir.glob(File.join(PROV_PROFILE_DIR,"*.mobileprovision")) do |installed_profile_path|
-  
-			# 	next if not /#{UUID_REGEX}\.mobileprovision$/.match(installed_profile_path)
-  	# 			puts "Examining prov. profile: #{installed_profile_path}" if DEBUG
-
-  	# 			installed_profile = IosProvisioningProfile.new(File.open(installed_profile_path).read)
-
-  			self.loop_through_existing_profiles do |installed_profile|
+  			self.loop_through_existing_profiles do |installed_profile, installed_profile_path|
   				if installed_profile.app_id == new_profile.app_id and 
 	 			   installed_profile.creation_date < new_profile.creation_date and 
 	 			   installed_profile.has_provisioned_devices? == new_profile.has_provisioned_devices?
@@ -103,9 +95,8 @@ module IosAndroidToolbox
 
 		def self.profile_worth_installing?(path)
 			new_profile = IosProvisioningProfile.new(path)
-			loop_through_existing_profiles do |installed_profile|
+			loop_through_existing_profiles do |installed_profile, path|
   				if installed_profile.app_id == new_profile.app_id and installed_profile.has_provisioned_devices? == new_profile.has_provisioned_devices?
-  					puts "#{installed_profile.creation_date} #{new_profile.creation_date}"
 	 			  	return false if installed_profile.creation_date >= new_profile.creation_date 
   				end
 			end
@@ -123,7 +114,7 @@ module IosAndroidToolbox
 
   				installed_profile = IosProvisioningProfile.new(File.open(installed_profile_path).read)
 
-  				yield installed_profile
+  				yield installed_profile, installed_profile_path
 			end
 		end
 	end
