@@ -49,7 +49,20 @@ module IosAndroidToolbox
     end
 
     def components
-      version.split('.')
+      v = version
+      if version.match /([0-9\.]+)([a-zA-Z0-9\-]*)$/
+        v = $1
+        suffix = $2
+      end
+      v.split('.')
+    end
+
+    def suffix
+      suffix = ''
+      if version.match /([0-9\.]+)([a-zA-Z0-9\-]*)$/
+        suffix = $2
+      end
+      suffix
     end
 
     def next_version(inc_idx = nil)
@@ -83,7 +96,7 @@ module IosAndroidToolbox
 
       comps = comps.slice(0,max_comps)
 
-      comps.join "."
+      comps.join(".") + suffix
     end
 
     def next_version!(inc_idx = nil)

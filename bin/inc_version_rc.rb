@@ -1,3 +1,3 @@
 #!/usr/bin/ruby
 
-system "inc_version.rb -rc"
+system "inc_version.rb -r "+ARGV.join(' ')

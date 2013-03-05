@@ -27,7 +27,7 @@ OptionParser.new do |opts|
     $inc_idx = 2
     $max_comps = 3
   end
-  opts.on("-rc", "--candidate", "Increments RELEASE CANDIDATE number (default option)") do |v|
+  opts.on("-r", "--candidate", "Increments RELEASE CANDIDATE number (default option)") do |v|
     $inc_idx = 3
     $max_comps = 4
   end
