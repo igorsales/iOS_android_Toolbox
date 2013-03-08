@@ -39,7 +39,12 @@ module IosAndroidToolbox
         files = IosVersionController.find_project_info << AndroidVersionController.find_project_info
         files.flatten!
         
-        version_file = files.first if files.length == 1
+        if files.length == 1
+          version_file = files.first
+        elsif files.length > 1
+          # Heuristic: choose shorted string path
+          version_file = files.sort { |a,b| a.length <=> b.length }[0]
+        end
       end
       version_file
     end
