@@ -39,17 +39,6 @@ module IosAndroidToolbox
 		  end
 		end
 
-		# def app_id
-		#   # <key>application-identifier</key>
-		#   # <string>NDVAA33T9J.com.favequest.FFSApp.87.ircpa</string>
-		#   if /<key>application-identifier<\/key>\s*<string>[A-Za-z0-9]+\.([^<]+)<\/string>/.match(contents)
-		#     puts "Found app Id: #{$1}" if DEBUG
-		#     app_id = $1
-		#   else
-		#     nil
-		#   end
-		# end
-
 		def app_id
 			@app_id ||= begin
 				id = plist['Entitlements']['application-identifier']
@@ -64,19 +53,6 @@ module IosAndroidToolbox
 		def app_id_prefix
 			plist['ApplicationIdentifierPrefix']
 		end
-
-		# def creation_date
-		#   # <key>CreationDate</key>
-		#   # <date>2011-08-30T02:11:55Z</date>
-		#   if /<key>CreationDate<\/key>\s*<date>([^<]+)<\/date>/.match(contents)
-		#     #creation_date = Date.strptime($1, '%Y-%m-%dT%h:%M:%sZ')
-		#     creation_date = Time.parse($1)
-		#     puts "Found Creation date: #{creation_date.to_s}" if DEBUG
-		#     creation_date
-		#   else
-		#     nil
-		#   end
-		# end
 
 		def creation_date
 			plist['CreationDate']
