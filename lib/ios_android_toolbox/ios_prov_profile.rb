@@ -1,5 +1,7 @@
+require 'rubygems'
 require 'fileutils'
 require 'time'
+require 'plist'
 
 module IosAndroidToolbox
 	class IosProvisioningProfile
@@ -9,6 +11,22 @@ module IosAndroidToolbox
 		DEBUG=false
 
 		attr_reader :contents
+
+		def plist_string
+			@plist_string ||= begin
+				xml_start = contents.index('<?xml version=')
+				return nil if xml_start.nil?
+
+				xml_end = contents.index('</plist>', xml_start)
+				return nil if xml_end.nil?
+
+				contents.slice(xml_start, xml_end - xml_start + 8)
+			end
+		end
+
+		def plist
+			plist ||= Plist.parse_xml(plist_string)
+		end
 
 		def uuid
 		  # <key>UUID</key>
@@ -48,6 +66,26 @@ module IosAndroidToolbox
 		def has_provisioned_devices?
 		  # <key>ProvisionedDevices</key>
 		  !!(/<key>ProvisionedDevices<\/key>/.match(contents))
+		end
+
+		def provisioned_devices
+			plist['ProvisionedDevices']
+		end
+
+		def aps_environment
+			plist['Entitlements']['aps-environment']
+		end
+
+		def get_task_allow
+			plist['Entitlements']['get-task-allow']
+		end
+
+		def is_development?
+			provisioned_devices.is_a? Array and get_task_allow == true and aps_environment == 'development'
+		end
+
+		def is_production?
+			provisioned_devices.nil? and get_task_allow == false and aps_environment == 'production'
 		end
 
 		def initialize(contents)
