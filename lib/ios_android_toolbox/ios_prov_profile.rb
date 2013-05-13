@@ -76,11 +76,19 @@ module IosAndroidToolbox
 		end
 
 		def is_development?
-			provisioned_devices.is_a? Array and get_task_allow == true and aps_environment == 'development'
+			provisioned_devices.is_a? Array and get_task_allow == true
 		end
 
 		def is_production?
-			provisioned_devices.nil? and get_task_allow == false and aps_environment == 'production'
+			provisioned_devices.nil? and get_task_allow == false
+		end
+
+		def is_development_aps_environment?
+			aps_environment == 'development'
+		end
+
+		def is_production_aps_environment?
+			aps_environment == 'production'
 		end
 
 		def initialize(contents)
