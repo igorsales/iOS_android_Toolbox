@@ -53,6 +53,10 @@ module IosAndroidToolbox
         def version
             @manifest[ANDROID_VERSION_NAME]
         end
+
+        def app_id
+            raise "Not implemented yet."
+        end
         
         def version_code
             @manifest[ANDROID_VERSION_CODE]

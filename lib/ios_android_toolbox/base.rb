@@ -53,6 +53,10 @@ module IosAndroidToolbox
       raise "Abstract method. Please override"
     end
 
+    def app_id
+      raise "Abstract method. Please override"
+    end
+
     def components
       v = version
       if version.match /([0-9\.]+)([a-zA-Z0-9\-]*)$/

@@ -12,6 +12,7 @@ module IosAndroidToolbox
     SHORT_VERSION_KEY = 'CFBundleShortVersionString'
     URL_TYPES_KEY = "CFBundleURLTypes"
     URL_SCHEMES_KEY = "CFBundleURLSchemes"
+    BUNDLE_IDENTIFIER_KEY = "CFBundleIdentifier"
       
     def self.find_project_info_candidates_for_dir(dir)
       candidates = []
@@ -49,6 +50,14 @@ module IosAndroidToolbox
 
     def version
       @dict[VERSION_KEY]
+    end
+
+    def bundle_id
+      @dict[BUNDLE_IDENTIFIER_KEY]
+    end
+
+    def app_id
+      bundle_id
     end
 
     def next_version!(inc_idx = nil)

@@ -39,6 +39,10 @@ module IosAndroidToolbox
 		  end
 		end
 
+		def path
+			File.join(PROV_PROFILE_DIR,uuid+".mobileprovision")
+		end
+
 		def app_id
 			@app_id ||= begin
 				id = plist['Entitlements']['application-identifier']
@@ -81,6 +85,10 @@ module IosAndroidToolbox
 
 		def is_production?
 			provisioned_devices.nil? and get_task_allow == false
+		end
+
+		def is_adhoc?
+			provisioned_devices.is_a? Array and get_task_allow == false
 		end
 
 		def is_development_aps_environment?
