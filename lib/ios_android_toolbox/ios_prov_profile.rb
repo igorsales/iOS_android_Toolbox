@@ -116,7 +116,9 @@ module IosAndroidToolbox
   			self.loop_through_existing_profiles do |installed_profile, installed_profile_path|
   				if installed_profile.app_id == new_profile.app_id and 
 	 			   installed_profile.creation_date < new_profile.creation_date and 
-	 			   installed_profile.has_provisioned_devices? == new_profile.has_provisioned_devices?
+	 			   (installed_profile.is_development? == new_profile.is_development? or 
+  					 installed_profile.is_production? == new_profile.is_production? or
+  					 installed_profile.is_adhoc? == new_profile.is_adhoc?)
 					puts "Removing stale Prov Profile: #{installed_profile_path}"
     				File.delete installed_profile_path
   				end
@@ -145,7 +147,10 @@ module IosAndroidToolbox
 		def self.profile_worth_installing?(path)
 			new_profile = IosProvisioningProfile.new(path)
 			loop_through_existing_profiles do |installed_profile, path|
-  				if installed_profile.app_id == new_profile.app_id and installed_profile.has_provisioned_devices? == new_profile.has_provisioned_devices?
+  				if installed_profile.app_id == new_profile.app_id and
+  					(installed_profile.is_development? == new_profile.is_development? or 
+  					 installed_profile.is_production? == new_profile.is_production? or
+  					 installed_profile.is_adhoc? == new_profile.is_adhoc?)
 	 			  	return false if installed_profile.creation_date >= new_profile.creation_date 
   				end
 			end
