@@ -116,9 +116,9 @@ module IosAndroidToolbox
   			self.loop_through_existing_profiles do |installed_profile, installed_profile_path|
   				if installed_profile.app_id == new_profile.app_id and 
 	 			   installed_profile.creation_date < new_profile.creation_date and 
-	 			   (installed_profile.is_development? == new_profile.is_development? or 
-  					 installed_profile.is_production? == new_profile.is_production? or
-  					 installed_profile.is_adhoc? == new_profile.is_adhoc?)
+	 			   (installed_profile.is_development? and new_profile.is_development? or 
+  					 installed_profile.is_production? and new_profile.is_production? or
+  					 installed_profile.is_adhoc?      and new_profile.is_adhoc?)
 					puts "Removing stale Prov Profile: #{installed_profile_path}"
     				File.delete installed_profile_path
   				end
@@ -135,7 +135,7 @@ module IosAndroidToolbox
 			new_path    = File.join(PROV_PROFILE_DIR, new_profile.uuid+".mobileprovision")
 
 			if File.expand_path(path) != File.expand_path(new_path)
-				if profile_worth_installing? path
+				if profile_worth_installing? new_profile
 					self.remove_stale_equivalent_profiles(path)
 					FileUtils.copy(path, new_path)
 				end
@@ -144,13 +144,19 @@ module IosAndroidToolbox
 			end
 		end
 
-		def self.profile_worth_installing?(path)
-			new_profile = IosProvisioningProfile.new(path)
+		def self.profile_worth_installing?(path_or_profile)
+			if path_or_profile.is_a? String
+				new_profile = IosProvisioningProfile.new(path_or_profile)
+			elsif path_or_profile.is_a? IosProvisioningProfile
+				new_profile = path_or_profile
+			else
+				raise "Invalid profile or profile path specified"
+			end
 			loop_through_existing_profiles do |installed_profile, path|
   				if installed_profile.app_id == new_profile.app_id and
-  					(installed_profile.is_development? == new_profile.is_development? or 
-  					 installed_profile.is_production? == new_profile.is_production? or
-  					 installed_profile.is_adhoc? == new_profile.is_adhoc?)
+  					(installed_profile.is_development? and new_profile.is_development? or 
+  					 installed_profile.is_production?  and new_profile.is_production? or
+  					 installed_profile.is_adhoc?       and new_profile.is_adhoc?)
 	 			  	return false if installed_profile.creation_date >= new_profile.creation_date 
   				end
 			end
