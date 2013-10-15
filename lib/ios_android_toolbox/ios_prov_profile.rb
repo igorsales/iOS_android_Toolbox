@@ -99,6 +99,13 @@ module IosAndroidToolbox
 			aps_environment == 'production'
 		end
 
+		def install
+			dst_path = File.join(PROV_PROFILE_DIR,"#{uuid}.mobileprovision")
+			File.open(dst_path, "wb") do |f|
+				f.write(contents)
+			end
+		end
+
 		def initialize(contents)
 			# If we specify a path, read it first
 			begin
@@ -166,7 +173,7 @@ module IosAndroidToolbox
 
 		def self.loop_through_profiles_for_app_id(id, &block)
 			self.loop_through_existing_profiles do |p,path|
-				yield p if p.app_id == id
+				yield p, path if p.app_id == id
 			end
 		end
 
