@@ -31,7 +31,7 @@ module IosAndroidToolbox
 		def uuid
 		  # <key>UUID</key>
 		  #  <string>06AF2826-608D-4CE9-99AE-AA917FF1641E</string>
-		  if /<key>UUID<\/key>\s*<string>(#{UUID_REGEX})<\/string>/.match(contents)
+		  if /<key>UUID<\/key>\s*<string>(#{UUID_REGEX})<\/string>/.match(plist_string)
 		    puts "Found UUID: #{$1}" if DEBUG
 		    uuid = $1
 		  else
@@ -64,7 +64,7 @@ module IosAndroidToolbox
 
 		def has_provisioned_devices?
 		  # <key>ProvisionedDevices</key>
-		  !!(/<key>ProvisionedDevices<\/key>/.match(contents))
+		  !!(/<key>ProvisionedDevices<\/key>/.match(plist_string))
 		end
 
 		def provisioned_devices
@@ -114,6 +114,7 @@ module IosAndroidToolbox
 				end
 			rescue
 			end
+
 			@contents = contents
 		end
 
