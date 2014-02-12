@@ -24,7 +24,8 @@ module IosAndroidToolbox
             if File.exists?(filename)
               begin
                 manifest = Nokogiri::XML(File.open(filename)).xpath(MANIFEST, 'android' => "http://schemas.android.com/apk/res/android").first
-                candidates.push filename if manifest and manifest[ANDROID_VERSION_NAME]
+                version = manifest[ANDROID_VERSION_NAME] || manifest[ANDROID_NS+ANDROID_VERSION_NAME]
+                candidates.push filename if manifest and version
               rescue
                 # Do nothing, just skip the file. Must be in binary format
               end
@@ -51,7 +52,7 @@ module IosAndroidToolbox
         end
         
         def version
-            @manifest[ANDROID_VERSION_NAME]
+            @manifest[ANDROID_VERSION_NAME] || @manifest[ANDROID_NS+ANDROID_VERSION_NAME]
         end
 
         def app_id
