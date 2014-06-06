@@ -79,6 +79,22 @@ module IosAndroidToolbox
 			plist['Entitlements']['get-task-allow']
 		end
 
+		def team_name
+			plist['TeamName']
+		end
+
+		def team_identifiers
+			plist['TeamIdentifier']
+		end
+
+		def team_identifier
+			if team_identifiers && team_identifiers.size > 0
+				team_identifiers[0]
+			else
+				nil
+			end
+		end
+
 		def is_development?
 			provisioned_devices.is_a? Array and get_task_allow == true
 		end
