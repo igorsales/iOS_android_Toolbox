@@ -13,6 +13,8 @@ module IosAndroidToolbox
     URL_TYPES_KEY = "CFBundleURLTypes"
     URL_SCHEMES_KEY = "CFBundleURLSchemes"
     BUNDLE_IDENTIFIER_KEY = "CFBundleIdentifier"
+    BUNDLE_DISPLAY_NAME = "CFBundleDisplayName"
+    BUNDLE_NAME = "CFBundleName"
       
     def self.find_project_info_candidates_for_dir(dir)
       candidates = []
@@ -54,6 +56,14 @@ module IosAndroidToolbox
 
     def bundle_id
       @dict[BUNDLE_IDENTIFIER_KEY]
+    end
+
+    def bundle_display_name
+      @dict[BUNDLE_DISPLAY_NAME]
+    end
+
+    def bundle_name
+      @dict[BUNDLE_NAME]
     end
 
     def app_id
