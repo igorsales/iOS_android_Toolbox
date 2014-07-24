@@ -15,6 +15,7 @@ module IosAndroidToolbox
     BUNDLE_IDENTIFIER_KEY = "CFBundleIdentifier"
     BUNDLE_DISPLAY_NAME = "CFBundleDisplayName"
     BUNDLE_NAME = "CFBundleName"
+    BUNDLE_ICON_FILES = "CFBundleIconFiles"
       
     def self.find_project_info_candidates_for_dir(dir)
       candidates = []
@@ -64,6 +65,10 @@ module IosAndroidToolbox
 
     def bundle_name
       @dict[BUNDLE_NAME]
+    end
+
+    def bundle_icon_files
+      @dict[BUNDLE_ICON_FILES]
     end
 
     def app_id
