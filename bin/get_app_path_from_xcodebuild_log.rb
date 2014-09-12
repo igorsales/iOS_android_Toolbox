@@ -3,6 +3,11 @@
 
 logfile = ARGV.shift
 
+
+# This is here to force encoding so we don't have a problem with ASCII encoding, so accents aren't a problem
+Encoding.default_external = Encoding::UTF_8
+Encoding.default_internal = Encoding::UTF_8
+
 IO.foreach(logfile) do |line|
 #     /usr/bin/codesign --force --sign "iPhone Developer: Igor Sales (N6726PC4QE)" --resource-rules=/Users/igorsales/Library/Developer/Xcode/DerivedData/FFSApp-bthsqocpmgfkvfcqpbhzyfofafmp/Build/Products/Adhoc-iphoneos/blacksheep.app/ResourceRules.plist --entitlements /Users/igorsales/Library/Developer/Xcode/DerivedData/FFSApp-bthsqocpmgfkvfcqpbhzyfofafmp/Build/Intermediates/FFSApp.build/Adhoc-iphoneos/___FFSApp___.build/blacksheep.xcent /Users/igorsales/Library/Developer/Xcode/DerivedData/FFSApp-bthsqocpmgfkvfcqpbhzyfofafmp/Build/Products/Adhoc-iphoneos/blacksheep.app
   #if /[\s[a-z\/]+codesign.*(?<!b)\s([^\s]+\.app)/.match line
