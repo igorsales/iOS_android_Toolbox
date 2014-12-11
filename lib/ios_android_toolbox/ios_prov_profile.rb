@@ -87,6 +87,10 @@ module IosAndroidToolbox
 			plist['TeamIdentifier']
 		end
 
+		def developer_certificates
+			plist['DeveloperCertificates']
+		end
+
 		def team_identifier
 			if team_identifiers && team_identifiers.size > 0
 				team_identifiers[0]
