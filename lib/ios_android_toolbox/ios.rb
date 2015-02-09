@@ -8,7 +8,7 @@ require 'ios_android_toolbox/base'
 module IosAndroidToolbox
 
   class IosVersionController < VersionController
-    VERSION_KEY = 'CFBundleVersion'
+    VERSION_KEY = 'CFBundleShortVersionString'
     SHORT_VERSION_KEY = 'CFBundleShortVersionString'
     URL_TYPES_KEY = "CFBundleURLTypes"
     URL_SCHEMES_KEY = "CFBundleURLSchemes"
