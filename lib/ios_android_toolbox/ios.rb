@@ -8,7 +8,7 @@ require 'ios_android_toolbox/base'
 module IosAndroidToolbox
 
   class IosVersionController < VersionController
-    VERSION_KEY = 'CFBundleShortVersionString'
+    VERSION_KEY = 'CFBundleVersion'
     SHORT_VERSION_KEY = 'CFBundleShortVersionString'
     URL_TYPES_KEY = "CFBundleURLTypes"
     URL_SCHEMES_KEY = "CFBundleURLSchemes"
@@ -26,7 +26,7 @@ module IosAndroidToolbox
         if File.exists?(filename)
           begin
             dict = Plist.parse_xml(filename)
-            candidates.push filename if dict and dict[VERSION_KEY]
+            candidates.push filename if dict and dict[SHORT_VERSION_KEY]
           rescue
             # Do nothing, just skip the file. Must be in binary format
           end
@@ -46,13 +46,13 @@ module IosAndroidToolbox
         raise "Cannot parse file #{version_file}"
       end
 
-      raise "File #{version_file} does not have a #{VERSION_KEY} key" if @dict[VERSION_KEY].nil?
+      raise "File #{version_file} does not have a #{SHORT_VERSION_KEY} key" if @dict[SHORT_VERSION_KEY].nil?
         
       self
     end
 
     def version
-      @dict[VERSION_KEY]
+      @dict[SHORT_VERSION_KEY]
     end
 
     def bundle_id
