@@ -63,7 +63,7 @@ module IosAndroidToolbox
         v = $1
         suffix = $2
       end
-      v.split('.')
+      v.split(/[\.]/)
     end
 
     def suffix
@@ -109,6 +109,10 @@ module IosAndroidToolbox
     end
 
     def next_version!(inc_idx = nil)
+      raise "Abstract method. Please override"
+    end
+
+    def next_build_number!
       raise "Abstract method. Please override"
     end
 

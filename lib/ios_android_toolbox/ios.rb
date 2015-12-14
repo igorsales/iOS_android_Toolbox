@@ -8,8 +8,8 @@ require 'ios_android_toolbox/base'
 module IosAndroidToolbox
 
   class IosVersionController < VersionController
-    VERSION_KEY = 'CFBundleVersion'
-    SHORT_VERSION_KEY = 'CFBundleShortVersionString'
+    BUILD_VERSION_KEY = 'CFBundleVersion' # User as Build  or release candidate
+    BUNDLE_VERSION_KEY = 'CFBundleShortVersionString' # Use as Version
     URL_TYPES_KEY = "CFBundleURLTypes"
     URL_SCHEMES_KEY = "CFBundleURLSchemes"
     BUNDLE_IDENTIFIER_KEY = "CFBundleIdentifier"
@@ -26,7 +26,7 @@ module IosAndroidToolbox
         if File.exists?(filename)
           begin
             dict = Plist.parse_xml(filename)
-            candidates.push filename if dict and dict[SHORT_VERSION_KEY]
+            candidates.push filename if dict and dict[BUNDLE_VERSION_KEY]
           rescue
             # Do nothing, just skip the file. Must be in binary format
           end
@@ -46,13 +46,13 @@ module IosAndroidToolbox
         raise "Cannot parse file #{version_file}"
       end
 
-      raise "File #{version_file} does not have a #{SHORT_VERSION_KEY} key" if @dict[SHORT_VERSION_KEY].nil?
+      raise "File #{version_file} does not have a #{BUNDLE_VERSION_KEY} key" if @dict[BUNDLE_VERSION_KEY].nil?
         
       self
     end
 
     def version
-      @dict[SHORT_VERSION_KEY]
+      "#{@dict[BUNDLE_VERSION_KEY]}-#{@dict[BUILD_VERSION_KEY]}"
     end
 
     def bundle_id
@@ -75,8 +75,42 @@ module IosAndroidToolbox
       bundle_id
     end
 
+    def bundle_version
+      @dict[BUNDLE_VERSION_KEY]
+    end
+
+    def build_number
+      @dict[BUILD_VERSION_KEY]
+    end
+
+    def next_version(inc_idx = nil)
+      if inc_idx == @inc_idx # trying to increment build number
+        v = bundle_version
+        s = (build_number.to_i + 1).to_s
+      else
+        v = super.next_version(inc_idx)
+        s = build_number
+      end
+
+      "#{v}-#{s}"
+    end
+
     def next_version!(inc_idx = nil)
-      @dict[SHORT_VERSION_KEY] = @dict[VERSION_KEY] = next_version
+      if inc_idx < @inc_idx
+        @dict[BUNDLE_VERSION_KEY] = next_version(inc_idx)
+      else
+        @dict[BUILD_VERSION_KEY] = (build_number.to_i + 1).to_s
+      end
+
+      version
+    end
+
+    def next_build_number
+      next_version(@inc_idx)
+    end
+
+    def next_build_number!
+      next_version!(@inc_idx)
     end
 
     def url_types
