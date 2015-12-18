@@ -88,7 +88,7 @@ module IosAndroidToolbox
         v = bundle_version
         s = (build_number.to_i + 1).to_s
       else
-        v = super.next_version(inc_idx)
+        v = super(inc_idx)
         s = build_number
       end
 
