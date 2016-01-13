@@ -98,7 +98,7 @@ module IosAndroidToolbox
     def next_version!(inc_idx = @inc_idx)
       if inc_idx < @inc_idx
         @dict[BUNDLE_VERSION_KEY] = next_version(inc_idx).gsub(/\-.+$/,'')
-        @dict[BUILD_VERSION_KEY]  = 0
+        @dict[BUILD_VERSION_KEY]  = '0'
       else
         @dict[BUILD_VERSION_KEY]  = (build_number.to_i + 1).to_s
       end
