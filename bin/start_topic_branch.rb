@@ -16,7 +16,7 @@ raise "Please specify the version file" if version_file.nil?
 ctrl = version_controller_for_version_file version_file
 
 if topic.nil?
-  topic = ctrl.next_version(2).gsub(/\-.+$/,'').gsub(/\.0$/,'')
+  topic = ctrl.next_version!(2).gsub(/\-.+$/,'').gsub(/\.0$/,'')
 end
 
 topic.gsub!(/[\. \t\n]/, '_') if topic
@@ -39,7 +39,6 @@ g.branch(topic_branch).delete if g.branches[topic_branch]
 g.branch(topic_branch).checkout
 
 # Update the version number and commit
-ctrl.next_version!
 ctrl.write_to_output_file version_file
 
 # Commit the result
